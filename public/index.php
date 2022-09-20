@@ -2,7 +2,9 @@
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
-
+use Discord\Discord;
+use Discord\Parts\Channel\Message;
+use Discord\WebSockets\Event;
 define('LARAVEL_START', microtime(true));
 
 /*
@@ -53,3 +55,21 @@ $response = $kernel->handle(
 )->send();
 
 $kernel->terminate($request, $response);
+
+
+// discord bot
+
+$discord = new Discord([
+    'token' => 'bot-token',
+]);
+
+$discord->on('ready', function (Discord $discord) {
+    echo "Bot is ready!", PHP_EOL;
+
+    // Listen for messages.
+    $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) {
+        echo "{$message->author->username}: {$message->content}", PHP_EOL;
+    });
+});
+
+$discord->run();
