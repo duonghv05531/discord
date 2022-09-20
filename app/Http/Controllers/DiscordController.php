@@ -10,6 +10,7 @@ use Discord\WebSockets\Event;
 class DiscordController extends Controller
 {
     public function index(){
-        return view('welcome');
+        $b = 1;
+        return view('welcome', $b);
     }
 }
